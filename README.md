@@ -1,5 +1,7 @@
 # 🎲 Dice Roll Battle
 
+**[Play Live Now: diceroll-wxkh.onrender.com](https://diceroll-wxkh.onrender.com)**
+
 **Battle your friends (and bots) in a high-stakes, real-time dice competition!**
 
 Dice Roll Battle is a premium, web-based multiplayer experience built for competitive fun. Whether you're playing with local friends or challenging our custom-built AI bots, every roll matters. With smooth 3D animations, real-time chat, and customizable game rules, it's the ultimate way to settle scores.
