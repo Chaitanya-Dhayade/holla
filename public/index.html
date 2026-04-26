@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dice Roll Battle 🎲</title>
+  <meta name="description" content="Real-time multiplayer dice battle. Create a room, share the code, roll dice, win!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="confetti-container" aria-hidden="true"></div>
+
+<!-- ── LOBBY ── -->
+<div id="lobby-screen" class="screen active">
+  <div class="logo-wrap">
+    <div class="logo-dice">🎲</div>
+    <h1>Dice Roll<br/><span>Battle</span></h1>
+    <p class="tagline">Multiplayer · Real-time · Distributed</p>
+  </div>
+
+  <div class="card" id="lobby-card">
+    <input id="player-name" type="text" maxlength="16" placeholder="Enter your name…" autocomplete="off" />
+
+    <div class="btn-row">
+      <button id="btn-create" class="btn btn-primary">🏠 Create Room</button>
+      <span class="or">or</span>
+      <div class="join-group">
+        <input id="room-code-input" type="text" maxlength="5" placeholder="ROOM CODE" autocomplete="off" />
+        <button id="btn-join" class="btn btn-secondary">🚪 Join</button>
+      </div>
+    </div>
+
+    <div id="lobby-error" class="error-msg hidden"></div>
+  </div>
+</div>
+
+<!-- ── WAITING ROOM ── -->
+<div id="waiting-screen" class="screen">
+  <div class="room-header">
+    <h2>Waiting Room</h2>
+    <div class="room-code-display">
+      Room: <span id="display-code">-----</span>
+      <button id="btn-copy" title="Copy code">📋</button>
+      <button id="btn-share" title="Copy invite link">🔗</button>
+    </div>
+  </div>
+
+  <div class="players-grid" id="waiting-players"></div>
+
+  <!-- Host-only settings -->
+  <div id="game-settings" class="game-settings hidden">
+    <div class="settings-row">
+      <label class="setting-label">Rounds
+        <select id="sel-rounds">
+          <option value="3">3</option>
+          <option value="5" selected>5</option>
+          <option value="7">7</option>
+          <option value="10">10</option>
+        </select>
+      </label>
+      <label class="setting-label">Dice
+        <select id="sel-dice">
+          <option value="D6" selected>D6</option>
+          <option value="D4">D4</option>
+          <option value="D8">D8</option>
+          <option value="D10">D10</option>
+          <option value="D12">D12</option>
+          <option value="D20">D20</option>
+        </select>
+      </label>
+      <label class="setting-label">Bot AI
+        <select id="sel-bot">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <div id="bot-controls" class="bot-controls hidden">
+    <button id="btn-add-bot" class="btn btn-bot">🤖 Add AI Bot</button>
+    <span id="bot-hint" class="bot-hint">Fill empty slots with AI opponents</span>
+  </div>
+
+  <div id="waiting-info" class="info-msg">Waiting for players… (2–4)</div>
+  <button id="btn-start" class="btn btn-primary hidden">⚔️ Start Battle!</button>
+</div>
+
+<!-- ── GAME ── -->
+<div id="game-screen" class="screen">
+  <header class="game-header">
+    <div class="round-badge">Round <span id="round-num">1</span> / <span id="total-rounds">5</span></div>
+    <div class="game-meta">
+      <span id="dice-badge" class="dice-type-badge">D6</span>
+      <div class="room-code-badge">🎲 <span id="game-room-code"></span></div>
+      <button id="btn-sound" class="btn-icon" title="Toggle sound">🔊</button>
+    </div>
+  </header>
+
+  <div class="game-body">
+    <!-- Scoreboard -->
+    <aside class="scoreboard">
+      <h3>Scoreboard</h3>
+      <div id="score-list"></div>
+    </aside>
+
+    <!-- Dice area -->
+    <main class="dice-area">
+      <div id="turn-banner" class="turn-banner"></div>
+      <div id="tiebreak-banner" class="tiebreak-banner hidden">⚡ TIEBREAK — Tied players re-roll!</div>
+
+      <div class="dice-scene" id="dice-scene">
+        <div class="dice" id="dice">
+          <div class="face front">
+            <div class="pips pips-1"><span class="pip"></span></div>
+          </div>
+          <div class="face back">
+            <div class="pips pips-6">
+              <span class="pip"></span><span class="pip"></span>
+              <span class="pip"></span><span class="pip"></span>
+              <span class="pip"></span><span class="pip"></span>
+            </div>
+          </div>
+          <div class="face right">
+            <div class="pips pips-2">
+              <span class="pip"></span><span class="pip"></span>
+            </div>
+          </div>
+          <div class="face left">
+            <div class="pips pips-5">
+              <span class="pip"></span><span class="pip"></span>
+              <span class="pip"></span><span class="pip"></span>
+              <span class="pip"></span>
+            </div>
+          </div>
+          <div class="face top">
+            <div class="pips pips-3">
+              <span class="pip"></span><span class="pip"></span>
+              <span class="pip"></span>
+            </div>
+          </div>
+          <div class="face bottom">
+            <div class="pips pips-4">
+              <span class="pip"></span><span class="pip"></span>
+              <span class="pip"></span><span class="pip"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Non-D6 result display -->
+      <div id="big-result" class="big-result hidden"></div>
+
+      <div id="roll-result" class="roll-result hidden"></div>
+      <button id="btn-roll" class="btn btn-roll hidden">🎲 Roll Dice!</button>
+
+      <!-- Roll history toggle -->
+      <button id="btn-history" class="btn-history hidden">📜 Round History</button>
+      <div id="history-panel" class="history-panel hidden"></div>
+    </main>
+
+    <!-- Chat -->
+    <aside class="chat-panel">
+      <h3>Chat</h3>
+      <div id="chat-messages" class="chat-messages"></div>
+      <div class="chat-input-row">
+        <input id="chat-input" type="text" maxlength="80" placeholder="Say something…" autocomplete="off" />
+        <button id="btn-send">➤</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Round result overlay -->
+  <div id="round-overlay" class="overlay hidden">
+    <div class="overlay-card">
+      <h2 id="round-title">Round Over!</h2>
+      <div id="round-rolls"></div>
+      <div id="round-winner-msg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── GAME OVER ── -->
+<div id="gameover-screen" class="screen">
+  <div class="gameover-card">
+    <div class="trophy">🏆</div>
+    <h2 id="winner-name">Winner!</h2>
+    <div id="final-scores"></div>
+    <button id="btn-play-again" class="btn btn-primary">🔁 Play Again</button>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
