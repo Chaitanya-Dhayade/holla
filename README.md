@@ -74,7 +74,7 @@ Dice Roll Battle is a premium, web-based multiplayer experience built for compet
 Playing with friends is easy! Follow these steps to get everyone into the same battle:
 
 1.  **The Host:** Click **"Create Room"**. Once you're in the lobby, look at the top of your screen to find your unique **5-character Room Code** (e.g., `A1B2C`).
-2.  **The Guest:** Open the game URL in your browser.
+2.  **The Guest:** Open **[https://diceroll-wxkh.onrender.com](https://diceroll-wxkh.onrender.com)** in their browser.
 3.  **Joining:** Enter your name, then type the **Room Code** into the "Enter Code" box and click **"Join Room"**.
 4.  **Battle:** Once your friend appears in the lobby list, the host can click "Start Battle" to begin!
 
